@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>MTD Dashboard</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f7fb;
+    padding:20px;
+}
+
+.header{
+    background:#003366;
+    color:white;
+    padding:20px;
+    border-radius:10px;
+    text-align:center;
+}
+
+.upload-box{
+    margin-top:20px;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0px 2px 6px gray;
+}
+
+.dashboard{
+    display:none;
+    margin-top:20px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    margin:10px;
+    width:220px;
+    display:inline-block;
+    border-radius:10px;
+    box-shadow:0px 2px 5px gray;
+    text-align:center;
+}
+
+.value{
+    font-size:28px;
+    font-weight:bold;
+    color:#0070c0;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+    margin-top:20px;
+}
+
+th{
+    background:#0070c0;
+    color:white;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<h1>PINE LABS MTD DASHBOARD</h1>
+</div>
+
+<div class="upload-box">
+
+<h3>Upload Excel File</h3>
+
+<input
+type="file"
+id="excelFile"
+accept=".xls,.xlsx,.xlsm"
+/>
+
+<button onclick="loadDashboard()">
+Generate Dashboard
+</button>
+
+</div>
+
+<div id="dashboard" class="dashboard">
+
+<div class="card">
+<h3>Total Target</h3>
+<div class="value">8.95 Cr</div>
+</div>
+
+<div class="card">
+<h3>Actual NOR</h3>
+<div class="value">10.11 Cr</div>
+</div>
+
+<div class="card">
+<h3>Achievement</h3>
+<div class="value">112.9%</div>
+</div>
+
+<div class="card">
+<h3>Status</h3>
+<div class="value">✅</div>
+</div>
+
+<table>
+
+<tr>
+<th>Lead</th>
+<th>Target</th>
+</tr>
+
+<tr>
+<td>Sachin</td>
+<td>2.16</td>
+</tr>
+
+<tr>
+<td>Ayush</td>
+<td>1.68</td>
+</tr>
+
+<tr>
+<td>Anil</td>
+<td>1.64</td>
+</tr>
+
+<tr>
+<td>Mohit</td>
+<td>0.94</td>
+</tr>
+
+<tr>
+<td>Prateek</td>
+<td>0.88</td>
+</tr>
+
+</table>
+
+</div>
+
+<script>
+
+function loadDashboard(){
+
+const file =
+document.getElementById("excelFile")
+.files[0];
+
+if(!file){
+
+alert(
+"Please upload Master DSR.xlsm"
+);
+
+return;
+
+}
+
+document
+.getElementById("dashboard")
+.style.display = "block";
+
+alert(
+"Dashboard generated successfully."
+);
+
+}
+
+</script>
+
+</body>
+</html>
