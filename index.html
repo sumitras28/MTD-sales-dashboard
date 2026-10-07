@@ -120,7 +120,23 @@ color:orange;
 .blue{
 color:#003366;
 }
+.target-card{
+border-left:6px solid #003366;
+}
 
+.actual-card{
+border-left:6px solid green;
+}
+
+.achievement-card{
+border-left:6px solid purple;
+}
+
+.status-card{
+border-left:6px solid orange;
+}
+
+  
 </style>
 
 </head>
@@ -128,6 +144,24 @@ color:#003366;
 <body>
 
 <div class="header">
+  <div style="
+background:white;
+padding:10px;
+margin-top:10px;
+border-radius:10px;
+display:flex;
+gap:20px;
+justify-content:center;
+font-weight:bold;">
+
+<span>📊 Overview</span>
+<span>🎯 Targets</span>
+<span>👨‍💼 Leads</span>
+<span>🏆 SM Ranking</span>
+<span>📦 Business Mix</span>
+<span>📈 Gap Analysis</span>
+
+</div>
 
 <h1>PINE LABS MTD SALES DASHBOARD</h1>
 
@@ -153,15 +187,31 @@ Generate Dashboard
 
 <div class="kpi-grid">
 
-<div class="card">
+<div class="card target-card">
 <div class="kpi-title">Target NOR</div>
-<div id="target" class="kpi-value blue">0</div>
+<div id="target" class="kpi-value blue">8.95 Cr</div>
 </div>
-  <div class="kpi-grid">
+
+<div class="card actual-card">
+<div class="kpi-title">Actual NOR</div>
+<div id="actual" class="kpi-value green">10.11 Cr</div>
+</div>
+
+<div class="card achievement-card">
+<div class="kpi-title">Achievement %</div>
+<div id="achievement"
+class="kpi-value green">
+112.9%
+</div>
+
+<div class="card status-card">
+<div class="kpi-title">Status</div>
+<div class="kpi-value green">TARGET ACHIEVED ✅</div>
+</div>
 
 <div class="card">
 <div class="kpi-title">Total GTV</div>
-<div id="gtv" class="kpi-value blue">0</div>
+<div id="gtv" class="kpi-value blue"><span class="blue">731.02 Cr</span></div>
 </div>
 
 <div class="card">
@@ -171,34 +221,54 @@ Generate Dashboard
 
 <div class="card">
 <div class="kpi-title">Total Leads</div>
-<div id="leads" class="kpi-value orange">0</div>
+<div id="leads" class="kpi-value orange">7</div>
 </div>
 
 <div class="card">
 <div class="kpi-title">Top Lead</div>
-<div id="topLead" class="kpi-value blue">-</div>
+<div id="topLead" class="kpi-value blue">Sachin</div>
 </div>
 
 </div>
 
-<div class="card">
-<div class="kpi-title">Actual NOR</div>
-<div id="actual" class="kpi-value green">0</div>
-</div>
+  <div class="section">
 
-<div class="card">
-<div class="kpi-title">Achievement %</div>
-<div id="achievement" class="kpi-value">0%</div>
-</div>
+<h2>Executive Summary</h2>
 
-<div class="card">
-<div class="kpi-title">RTG / Surplus</div>
-<div id="rtg" class="kpi-value">0</div>
-</div>
+<ul>
+
+<li>
+Target NOR:
+<b>8.95 Cr</b>
+</li>
+
+<li>
+Actual NOR:
+<b>10.11 Cr</b>
+</li>
+
+<li>
+Achievement:
+<b class="green">112.9%</b>
+</li>
+
+<li>
+Best Lead:
+<b>Sachin</b>
+</li>
+
+<li>
+Gap Leader:
+<b class="red">Anil</b>
+</li>
+
+</ul>
 
 </div>
 
 <div class="section">
+
+
 
 <h2>Lead Performance</h2>
 
@@ -211,11 +281,48 @@ Generate Dashboard
 <th>Achievement %</th>
 </tr>
 
+<tr>
+<td>Sachin</td>
+<td>2.16</td>
+<td>2.57</td>
+<td class="green">119%</td>
+</tr>
+
+<tr>
+<td>Ayush</td>
+<td>1.68</td>
+<td>1.92</td>
+<td class="green">114%</td>
+</tr>
+
+<tr>
+<td>Mohit</td>
+<td>0.94</td>
+<td>1.29</td>
+<td class="green">137%</td>
+</tr>
+
+<tr>
+<td>Anil</td>
+<td>1.64</td>
+<td>0.97</td>
+<td class="red">59%</td>
+</tr>
+
+<tr>
+<td>Prateek</td>
+<td>0.88</td>
+<td>0.88</td>
+<td class="orange">100%</td>
+</tr>
+
 </table>
 
 </div>
 
 <div class="section">
+
+
 
 <h2>Top SM Ranking</h2>
 
@@ -223,7 +330,32 @@ Generate Dashboard
 
 <tr>
 <th>SM</th>
-<th>NOR</th>
+<th>Target (Cr)</th>
+</tr>
+
+<tr>
+<td>Jeyasudha</td>
+<td>1.46</td>
+</tr>
+
+<tr>
+<td>Rohit</td>
+<td>0.96</td>
+</tr>
+
+<tr>
+<td>Shruti Chopra</td>
+<td>0.76</td>
+</tr>
+
+<tr>
+<td>Yashu</td>
+<td>0.58</td>
+</tr>
+
+<tr>
+<td>Mohit</td>
+<td>0.54</td>
 </tr>
 
 </table>
@@ -238,7 +370,32 @@ Generate Dashboard
 
 <tr>
 <th>Client</th>
-<th>NOR</th>
+<th>Category</th>
+</tr>
+
+<tr>
+<td>Dreamplug Technologies</td>
+<td>Top Client</td>
+</tr>
+
+<tr>
+<td>PhonePe</td>
+<td>Top Client</td>
+</tr>
+
+<tr>
+<td>Zpay Solutions</td>
+<td>Top Client</td>
+</tr>
+
+<tr>
+<td>PL-IPPS-WT-CheQ</td>
+<td>Top Client</td>
+</tr>
+
+<tr>
+<td>MagicPin</td>
+<td>Top Client</td>
 </tr>
 
 </table>
@@ -249,16 +406,37 @@ Generate Dashboard
 
 <h2>Business Mix</h2>
 
-<table id="productTable">
+<table>
 
 <tr>
-<th>Product Type</th>
-<th>NOR</th>
+<th>Business Type</th>
+<th>GTV (Cr)</th>
+</tr>
+
+<tr>
+<td>Merchant</td>
+<td>478.61</td>
+</tr>
+
+<tr>
+<td>Network</td>
+<td>11.91</td>
+</tr>
+
+<tr>
+<td>Online Reseller</td>
+<td>91.60</td>
+</tr>
+
+<tr>
+<td>Open Loop</td>
+<td>148.91</td>
 </tr>
 
 </table>
 
 </div>
+
 <div class="section">
 
 <h2>NSM Summary</h2>
@@ -314,6 +492,72 @@ Generate Dashboard
 <th>Target</th>
 <th>Actual</th>
 <th>Gap</th>
+</tr>
+
+<tr>
+<td>Sachin</td>
+<td>2.16</td>
+<td>2.57</td>
+<td class="green">+0.41</td>
+</tr>
+
+<tr>
+<td>Ayush</td>
+<td>1.68</td>
+<td>1.92</td>
+<td class="green">+0.24</td>
+</tr>
+
+<tr>
+<td>Anil</td>
+<td>1.64</td>
+<td>0.97</td>
+<td class="red">-0.67</td>
+</tr>
+
+</table>
+
+</div>
+  <div class="section">
+
+<h2>Lead Ranking</h2>
+
+<table>
+
+<tr>
+<th>Rank</th>
+<th>Lead</th>
+<th>Actual NOR</th>
+</tr>
+
+<tr>
+<td>1</td>
+<td>Sachin</td>
+<td>2.57 Cr</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>Ayush</td>
+<td>1.92 Cr</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>Mohit</td>
+<td>1.29 Cr</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>Anil</td>
+<td>0.97 Cr</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>Prateek</td>
+<td>0.88 Cr</td>
 </tr>
 
 </table>
