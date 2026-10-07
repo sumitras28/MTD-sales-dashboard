@@ -2,157 +2,89 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>MTD Dashboard</title>
+<title>Pine Labs Auto Dashboard</title>
+
+<script src="sdelivr.net/npm/xlsx/dist/xlsx.full.min.jsscript>
 
 <style>
 
 body{
-    font-family: Arial, sans-serif;
+    font-family:Arial,sans-serif;
     background:#f4f7fb;
     padding:20px;
 }
 
-.header{
-    background:#003366;
-    color:white;
-    padding:20px;
-    border-radius:10px;
-    text-align:center;
+h1{
+    color:#003366;
 }
 
-.upload-box{
-    margin-top:20px;
+.upload{
     background:white;
     padding:20px;
     border-radius:10px;
-    box-shadow:0px 2px 6px gray;
-}
-
-.dashboard{
-    display:none;
-    margin-top:20px;
+    margin-bottom:20px;
 }
 
 .card{
     background:white;
-    padding:20px;
-    margin:10px;
     width:220px;
     display:inline-block;
+    margin:10px;
+    padding:20px;
+    text-align:center;
     border-radius:10px;
     box-shadow:0px 2px 5px gray;
-    text-align:center;
 }
 
 .value{
-    font-size:28px;
+    font-size:26px;
+    color:blue;
     font-weight:bold;
-    color:#0070c0;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    background:white;
-    margin-top:20px;
-}
-
-th{
-    background:#0070c0;
-    color:white;
-}
-
-th,td{
-    border:1px solid #ddd;
-    padding:10px;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<div class="header">
-<h1>PINE LABS MTD DASHBOARD</h1>
-</div>
+<h1>PINE LABS MTD NOR DASHBOARD</h1>
 
-<div class="upload-box">
+<div class="upload">
 
-<h3>Upload Excel File</h3>
+<h3>Upload Master DSR.xlsm</h3>
 
-<input
-type="file"
-id="excelFile"
-accept=".xls,.xlsx,.xlsm"
-/>
+<input type="file" id="excelFile">
 
-<button onclick="loadDashboard()">
+<button onclick="processExcel()">
 Generate Dashboard
 </button>
 
 </div>
 
-<div id="dashboard" class="dashboard">
-
 <div class="card">
 <h3>Total Target</h3>
-<div class="value">8.95 Cr</div>
+<div id="target" class="value">0</div>
 </div>
 
 <div class="card">
-<h3>Actual NOR</h3>
-<div class="value">10.11 Cr</div>
+<h3>Total NOR</h3>
+<div id="nor" class="value">0</div>
 </div>
 
 <div class="card">
-<h3>Achievement</h3>
-<div class="value">112.9%</div>
+<h3>Achievement %</h3>
+<div id="ach" class="value">0%</div>
 </div>
 
 <div class="card">
-<h3>Status</h3>
-<div class="value">✅</div>
-</div>
-
-<table>
-
-<tr>
-<th>Lead</th>
-<th>Target</th>
-</tr>
-
-<tr>
-<td>Sachin</td>
-<td>2.16</td>
-</tr>
-
-<tr>
-<td>Ayush</td>
-<td>1.68</td>
-</tr>
-
-<tr>
-<td>Anil</td>
-<td>1.64</td>
-</tr>
-
-<tr>
-<td>Mohit</td>
-<td>0.94</td>
-</tr>
-
-<tr>
-<td>Prateek</td>
-<td>0.88</td>
-</tr>
-
-</table>
-
+<h3>RTG</h3>
+<div id="rtg" class="value">0</div>
 </div>
 
 <script>
 
-function loadDashboard(){
+function processExcel(){
 
 const file =
 document.getElementById("excelFile")
@@ -160,21 +92,105 @@ document.getElementById("excelFile")
 
 if(!file){
 
-alert(
-"Please upload Master DSR.xlsm"
-);
+alert("Please upload Master DSR.xlsm");
 
 return;
+}
+
+const reader = new FileReader();
+
+reader.onload = function(e){
+
+const data =
+new Uint8Array(e.target.result);
+
+const workbook =
+XLSX.read(data,{
+type:'array'
+});
+
+const masterSheet =
+workbook.Sheets["Master"];
+
+const targetSheet =
+workbook.Sheets["Targets"];
+
+if(!masterSheet){
+
+alert("Master sheet not found");
+
+return;
+}
+
+if(!targetSheet){
+
+alert("Targets sheet not found");
+
+return;
+}
+
+const master =
+XLSX.utils
+.sheet_to_json(masterSheet);
+
+const targets =
+XLSX.utils
+.sheet_to_json(targetSheet);
+
+let totalNOR = 0;
+
+master.forEach(r=>{
+
+totalNOR +=
+Number(r.NOR||0);
+
+});
+
+let totalTarget = 0;
+
+targets.forEach(r=>{
+
+totalTarget +=
+Number(r.Target||0);
+
+});
+
+let ach = 0;
+
+if(totalTarget>0){
+
+ach =
+(totalNOR/totalTarget)
+*100;
 
 }
 
-document
-.getElementById("dashboard")
-.style.display = "block";
+let rtg =
+totalTarget-totalNOR;
 
-alert(
-"Dashboard generated successfully."
-);
+document
+.getElementById("target")
+.innerHTML =
+totalTarget.toFixed(2);
+
+document
+.getElementById("nor")
+.innerHTML =
+totalNOR.toFixed(2);
+
+document
+.getElementById("ach")
+.innerHTML =
+ach.toFixed(1)+"%";
+
+document
+.getElementById("rtg")
+.innerHTML =
+rtg.toFixed(2);
+
+};
+
+reader.readAsArrayBuffer(file);
 
 }
 
