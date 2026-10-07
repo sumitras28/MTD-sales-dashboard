@@ -1,45 +1,112 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Pine Labs Auto Dashboard</title>
+<html lang="en">
 
-<script src="sdelivr.net/npm/xlsx/dist/xlsx.full.min.jsscript>
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pine Labs MTD Sales Dashboard</title>
 
 <style>
 
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
 body{
-    font-family:Arial,sans-serif;
-    background:#f4f7fb;
-    padding:20px;
+font-family:Segoe UI,Arial;
+background:#f4f7fb;
+padding:20px;
 }
 
-h1{
-    color:#003366;
+.header{
+background:#003366;
+color:white;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+text-align:center;
 }
 
-.upload{
-    background:white;
-    padding:20px;
-    border-radius:10px;
-    margin-bottom:20px;
+.upload-box{
+background:white;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+box-shadow:0px 2px 6px rgba(0,0,0,0.15);
+}
+
+.kpi-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+margin-bottom:20px;
 }
 
 .card{
-    background:white;
-    width:220px;
-    display:inline-block;
-    margin:10px;
-    padding:20px;
-    text-align:center;
-    border-radius:10px;
-    box-shadow:0px 2px 5px gray;
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0px 2px 5px rgba(0,0,0,0.15);
 }
 
-.value{
-    font-size:26px;
-    color:blue;
-    font-weight:bold;
+.kpi-title{
+font-size:14px;
+color:gray;
+}
+
+.kpi-value{
+font-size:30px;
+font-weight:bold;
+margin-top:10px;
+}
+
+.section{
+background:white;
+padding:20px;
+margin-top:20px;
+border-radius:12px;
+box-shadow:0px 2px 5px rgba(0,0,0,0.15);
+}
+
+.section h2{
+margin-bottom:15px;
+color:#003366;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th{
+background:#0070c0;
+color:white;
+padding:10px;
+}
+
+td{
+padding:10px;
+border:1px solid #ddd;
+}
+
+.green{
+color:green;
+}
+
+.red{
+color:red;
+}
+
+.orange{
+color:orange;
+}
+
+.blue{
+color:#003366;
 }
 
 </style>
@@ -48,153 +115,128 @@ h1{
 
 <body>
 
-<h1>PINE LABS MTD NOR DASHBOARD</h1>
+<div class="header">
 
-<div class="upload">
+<h1>PINE LABS MTD SALES DASHBOARD</h1>
+
+<p>Target vs NOR Performance Dashboard</p>
+
+</div>
+
+<div class="upload-box">
 
 <h3>Upload Master DSR.xlsm</h3>
 
-<input type="file" id="excelFile">
+<input
+type="file"
+id="excelFile"
+accept=".xls,.xlsx,.xlsm"
+/>
 
-<button onclick="processExcel()">
+<button onclick="loadExcel()">
 Generate Dashboard
 </button>
 
 </div>
 
+<div class="kpi-grid">
+
 <div class="card">
-<h3>Total Target</h3>
-<div id="target" class="value">0</div>
+<div class="kpi-title">Target NOR</div>
+<div id="target" class="kpi-value blue">0</div>
 </div>
 
 <div class="card">
-<h3>Total NOR</h3>
-<div id="nor" class="value">0</div>
+<div class="kpi-title">Actual NOR</div>
+<div id="actual" class="kpi-value green">0</div>
 </div>
 
 <div class="card">
-<h3>Achievement %</h3>
-<div id="ach" class="value">0%</div>
+<div class="kpi-title">Achievement %</div>
+<div id="achievement" class="kpi-value">0%</div>
 </div>
 
 <div class="card">
-<h3>RTG</h3>
-<div id="rtg" class="value">0</div>
+<div class="kpi-title">RTG / Surplus</div>
+<div id="rtg" class="kpi-value">0</div>
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>Lead Performance</h2>
+
+<table id="leadTable">
+
+<tr>
+<th>Lead</th>
+<th>Target</th>
+<th>Actual NOR</th>
+<th>Achievement %</th>
+</tr>
+
+</table>
+
+</div>
+
+<div class="section">
+
+<h2>Top SM Ranking</h2>
+
+<table id="smTable">
+
+<tr>
+<th>SM</th>
+<th>NOR</th>
+</tr>
+
+</table>
+
+</div>
+
+<div class="section">
+
+<h2>Top Clients</h2>
+
+<table id="clientTable">
+
+<tr>
+<th>Client</th>
+<th>NOR</th>
+</tr>
+
+</table>
+
+</div>
+
+<div class="section">
+
+<h2>Business Mix</h2>
+
+<table id="productTable">
+
+<tr>
+<th>Product Type</th>
+<th>NOR</th>
+</tr>
+
+</table>
+
 </div>
 
 <script>
 
-function processExcel(){
+function loadExcel(){
 
-const file =
-document.getElementById("excelFile")
-.files[0];
-
-if(!file){
-
-alert("Please upload Master DSR.xlsm");
-
-return;
-}
-
-const reader = new FileReader();
-
-reader.onload = function(e){
-
-const data =
-new Uint8Array(e.target.result);
-
-const workbook =
-XLSX.read(data,{
-type:'array'
-});
-
-const masterSheet =
-workbook.Sheets["Master"];
-
-const targetSheet =
-workbook.Sheets["Targets"];
-
-if(!masterSheet){
-
-alert("Master sheet not found");
-
-return;
-}
-
-if(!targetSheet){
-
-alert("Targets sheet not found");
-
-return;
-}
-
-const master =
-XLSX.utils
-.sheet_to_json(masterSheet);
-
-const targets =
-XLSX.utils
-.sheet_to_json(targetSheet);
-
-let totalNOR = 0;
-
-master.forEach(r=>{
-
-totalNOR +=
-Number(r.NOR||0);
-
-});
-
-let totalTarget = 0;
-
-targets.forEach(r=>{
-
-totalTarget +=
-Number(r.Target||0);
-
-});
-
-let ach = 0;
-
-if(totalTarget>0){
-
-ach =
-(totalNOR/totalTarget)
-*100;
-
-}
-
-let rtg =
-totalTarget-totalNOR;
-
-document
-.getElementById("target")
-.innerHTML =
-totalTarget.toFixed(2);
-
-document
-.getElementById("nor")
-.innerHTML =
-totalNOR.toFixed(2);
-
-document
-.getElementById("ach")
-.innerHTML =
-ach.toFixed(1)+"%";
-
-document
-.getElementById("rtg")
-.innerHTML =
-rtg.toFixed(2);
-
-};
-
-reader.readAsArrayBuffer(file);
+alert(
+"Excel processing module will be added here."
+);
 
 }
 
 </script>
 
 </body>
+
 </html>
