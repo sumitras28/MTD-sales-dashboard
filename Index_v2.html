@@ -1,1 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MTD Sales Dashboard</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:Segoe UI,Arial;
+background:#f4f7fb;
+padding:20px;
+}
+
+.header{
+background:#003366;
+color:white;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+text-align:center;
+}
+
+.upload-box{
+background:white;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+box-shadow:0px 2px 6px rgba(0,0,0,0.15);
+}
+
+.kpi-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+margin-bottom:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0px 2px 5px rgba(0,0,0,0.15);
+}
+  .card:hover{
+transform:translateY(-4px);
+transition:.3s;
+}
+
+.kpi-value{
+font-size:34px;
+}
+
+.section{
+overflow:auto;
+}
+
+.kpi-title{
+font-size:14px;
+color:gray;
+}
+
+.kpi-value{
+font-size:30px;
+font-weight:bold;
+margin-top:10px;
+}
+
+.section{
+background:white;
+padding:20px;
+margin-top:20px;
+border-radius:12px;
+box-shadow:0px 2px 5px rgba(0,0,0,0.15);
+}
+
+.section h2{
+margin-bottom:15px;
+color:#003366;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th{
+background:#0070c0;
+color:white;
+padding:10px;
+}
+
+td{
+padding:10px;
+border:1px solid #ddd;
+}
+
+.green{
+color:green;
+}
+
+.red{
+color:red;
+}
+
+.orange{
+color:orange;
+}
+
+.blue{
+color:#003366;
+}
+.target-card{
+border-left:6px solid #003366;
+}
+
+.actual-card{
+border-left:6px solid green;
+}
+
+.achievement-card{
+border-left:6px solid purple;
+}
+
+.status-card{
+border-left:6px solid orange;
+}
+
+  
+</style>
+<script src="https://cdn/npm/xlsx/dist/xlsx.full.min.jsscript>
+</head>
+
+<body>
+
+<div class="header">
+  <div style="
+background:white;
+padding:10px;
+margin-top:10px;
+border-radius:10px;
+display:flex;
+gap:20px;
+justify-content:center;
+font-weight:bold;">
+
+<span>📊 Overview</span>
+<span>🎯 Targets</span>
+<span>👨‍💼 Leads</span>
+<span>🏆 SM Ranking</span>
+<span>📦 Business Mix</span>
+<span>📈 Gap Analysis</span>
+
+</div>
+
+<h1>MTD SALES DASHBOARD</h1>
+
+<p>Target vs NOR Performance Dashboard</p>
+
+</div>
+
+<div class="upload-box">
+
+<h3>Upload Master DSR.xlsm</h3>
+
+<input
+type="file"
+id="excelFile"
+accept=".xls,.xlsx,.xlsm"
+/>
+
+<button onclick="loadExcel()">
+Generate Dashboard
+</button>
+
+</div>
+
+<div class="kpi-grid">
+
+<div class="card target-card">
+<div class="kpi-title">Target NOR</div>
+<div id="target" class="kpi-value blue">8.95 Cr</div>
+</div>
+
+<div class="card actual-card">
+<div class="kpi-title">Actual NOR</div>
+<div id="actual" class="kpi-value green">10.11 Cr</div>
+</div>
+
+<div class="card achievement-card">
+<div class="kpi-title">Achievement %</div>
+<div id="achievement"
+class="kpi-value green">
+112.9%
+</div>
+
+<div class="card status-card">
+<div class="kpi-title">Status</div>
+<div class="kpi-value green">TARGET ACHIEVED ✅</div>
+</div>
+
+<div class="card">
+<div class="kpi-title">Total GTV</div>
+<div id="gtv" class="kpi-value blue"><span class="blue">731.02 Cr</span></div>
+</div>
+
+<div class="card">
+<div class="kpi-title">Total Clients</div>
+<div id="clients" class="kpi-value green">0</div>
+</div>
+
+<div class="card">
+<div class="kpi-title">Total Leads</div>
+<div id="leads" class="kpi-value orange">7</div>
+</div>
+
+<div class="card">
+<div class="kpi-title">Top Lead</div>
+<div id="topLead" class="kpi-value blue">Sachin</div>
+</div>
+
+</div>
+
+  <div class="section">
+
+<h2>Executive Summary</h2>
+
+<ul>
+
+<li>
+Target NOR:
+<b>8.95 Cr</b>
+</li>
+
+<li>
+Actual NOR:
+<b>10.11 Cr</b>
+</li>
+
+<li>
+Achievement:
+<b class="green">112.9%</b>
+</li>
+
+<li>
+Best Lead:
+<b>Sachin</b>
+</li>
+
+<li>
+Gap Leader:
+<b class="red">Anil</b>
+</li>
+
+</ul>
+
+</div>
+
+<div class="section">
+
+
+
+<h2>Lead Performance</h2>
+
+<table id="leadTable">
+
+<tr>
+<th>Lead</th>
+<th>Target</th>
+<th>Actual NOR</th>
+<th>Achievement %</th>
+</tr>
+
+<tr>
+<td>Sachin</td>
+<td>2.16</td>
+<td>2.57</td>
+<td class="green">119%</td>
+</tr>
+
+<tr>
+<td>Ayush</td>
+<td>1.68</td>
+<td>1.92</td>
+<td class="green">114%</td>
+</tr>
+
+<tr>
+<td>Mohit</td>
+<td>0.94</td>
+<td>1.29</td>
+<td class="green">137%</td>
+</tr>
+
+<tr>
+<td>Anil</td>
+<td>1.64</td>
+<td>0.97</td>
+<td class="red">59%</td>
+</tr>
+
+<tr>
+<td>Prateek</td>
+<td>0.88</td>
+<td>0.88</td>
+<td class="orange">100%</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="section">
+
+
+
+<h2>Top SM Ranking</h2>
+
+<table id="smTable">
+
+<tr>
+<th>SM</th>
+<th>Target (Cr)</th>
+</tr>
+
+<tr>
+<td>Jeyasudha</td>
+<td>1.46</td>
+</tr>
+
+<tr>
+<td>Rohit</td>
+<td>0.96</td>
+</tr>
+
+<tr>
+<td>Shruti Chopra</td>
+<td>0.76</td>
+</tr>
+
+<tr>
+<td>Yashu</td>
+<td>0.58</td>
+</tr>
+
+<tr>
+<td>Mohit</td>
+<td>0.54</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="section">
+
+<h2>Top Clients</h2>
+
+<table id="clientTable">
+
+<tr>
+<th>Client</th>
+<th>Category</th>
+</tr>
+
+<tr>
+<td>Dreamplug Technologies</td>
+<td>Top Client</td>
+</tr>
+
+<tr>
+<td>PhonePe</td>
+<td>Top Client</td>
+</tr>
+
+<tr>
+<td>Zpay Solutions</td>
+<td>Top Client</td>
+</tr>
+
+<tr>
+<td>PL-IPPS-WT-CheQ</td>
+<td>Top Client</td>
+</tr>
+
+<tr>
+<td>MagicPin</td>
+<td>Top Client</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="section">
+
+<h2>Business Mix</h2>
+
+<table>
+
+<tr>
+<th>Business Type</th>
+<th>GTV (Cr)</th>
+</tr>
+
+<tr>
+<td>Merchant</td>
+<td>478.61</td>
+</tr>
+
+<tr>
+<td>Network</td>
+<td>11.91</td>
+</tr>
+
+<tr>
+<td>Online Reseller</td>
+<td>91.60</td>
+</tr>
+
+<tr>
+<td>Open Loop</td>
+<td>148.91</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="section">
+
+<h2>NSM Summary</h2>
+
+<table>
+
+<tr>
+<th>NSM</th>
+<th>Target</th>
+<th>Actual NOR</th>
+<th>Achievement %</th>
+</tr>
+
+<tr>
+<td>Kalappa</td>
+<td id="kalappaTarget">0</td>
+<td id="kalappaActual">0</td>
+<td id="kalappaAch">0%</td>
+</tr>
+
+<tr>
+<td>Ajay Gupta</td>
+<td id="ajayTarget">0</td>
+<td id="ajayActual">0</td>
+<td id="ajayAch">0%</td>
+</tr>
+
+<tr>
+<td>Mukesh</td>
+<td id="mukeshTarget">0</td>
+<td id="mukeshActual">0</td>
+<td id="mukeshAch">0%</td>
+</tr>
+
+<tr>
+<td>Sam</td>
+<td id="samTarget">0</td>
+<td id="samActual">0</td>
+<td id="samAch">0%</td>
+</tr>
+
+</table>
+
+</div>
+  <div class="section">
+
+<h2>Gap Analysis</h2>
+
+<table id="gapTable">
+
+<tr>
+<th>Lead</th>
+<th>Target</th>
+<th>Actual</th>
+<th>Gap</th>
+</tr>
+
+<tr>
+<td>Sachin</td>
+<td>2.16</td>
+<td>2.57</td>
+<td class="green">+0.41</td>
+</tr>
+
+<tr>
+<td>Ayush</td>
+<td>1.68</td>
+<td>1.92</td>
+<td class="green">+0.24</td>
+</tr>
+
+<tr>
+<td>Anil</td>
+<td>1.64</td>
+<td>0.97</td>
+<td class="red">-0.67</td>
+</tr>
+
+</table>
+
+</div>
+  <div class="section">
+
+<h2>Lead Ranking</h2>
+
+<table>
+
+<tr>
+<th>Rank</th>
+<th>Lead</th>
+<th>Actual NOR</th>
+</tr>
+
+<tr>
+<td>1</td>
+<td>Sachin</td>
+<td>2.57 Cr</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>Ayush</td>
+<td>1.92 Cr</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>Mohit</td>
+<td>1.29 Cr</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>Anil</td>
+<td>0.97 Cr</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>Prateek</td>
+<td>0.88 Cr</td>
+</tr>
+
+</table>
+
+</div>
+<script>
+
+function loadExcel(){
+
+const file =
+document.getElementById("excelFile")
+.files[0];
+
+if(!file){
+
+alert("Please upload Master DSR.xlsm");
+
+return;
+
+}
+
+alert(
+"File selected:\n\n" +
+file.name +
+"\n\nNext step: Excel parsing"
+);
+
+}
+
+
+</script>
+
+</body>
+
+</html>
