@@ -138,7 +138,7 @@ border-left:6px solid orange;
 
   
 </style>
-<script src="https://cdn.jsdelivr.net/npm/xlsx/distn.jsscript>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js
 </head>
 
 <body>
@@ -565,52 +565,57 @@ Gap Leader:
 </div>
 <script>
 
-function loadExcel(){
+function loadExcel() {
 
-const file =
-document.getElementById("excelFile").files[0];
+    const file =
+    document.getElementById("excelFile").files[0];
 
-if(!file){
+    if(!file){
 
-alert("Please upload Master DSR.xlsm");
+        alert("Please upload Master DSR.xlsm");
 
-return;
+        return;
 
-}
+    }
 
-const reader = new FileReader();
-
-reader.onload = function(e){
-
-const data =
-new Uint8Array(e.target.result);
-
-const workbook =
-XLSX.read(data,{
-type:"array"
-});
-
-alert(
-"Workbook Loaded Successfully\n\n" +
-workbook.SheetNames.join("\n")
-);
-
-};
-
-reader.readAsArrayBuffer(file);
+    alert(
+        "Selected File:\n\n" +
+        file.name
+    );
 
 }
 
 </script>
 
-alert(
-"File selected:\n\n" +
-file.name +
-"\n\nNext step: Excel parsing"
-);
+<script>
+
+function loadExcel() {
+
+    const file =
+    document.getElementById("excelFile").files[0];
+
+    if(!file){
+
+        alert("Please upload Master DSR.xlsm");
+
+        return;
+
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function(e){
+
+        alert(
+            "Selected File:\n\n" +
+            file.name
+        );
+
+    };
+
+    reader.readAsArrayBuffer(file);
 
 }
-
 
 </script>
 
