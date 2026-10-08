@@ -578,10 +578,17 @@ function loadExcel() {
 
     }
 
+   const reader = new FileReader();
+
+reader.onload = function(e){
+
     alert(
-        "Selected File:\n\n" +
-        file.name
+        "Workbook Read Successfully"
     );
+
+};
+
+reader.readAsArrayBuffer(file);
 
 }
 
