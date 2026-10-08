@@ -138,7 +138,7 @@ border-left:6px solid orange;
 
   
 </style>
-<script src="https://cdn/npm/xlsx/dist/xlsx.full.min.jsscript>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/distn.jsscript>
 </head>
 
 <body>
@@ -568,8 +568,7 @@ Gap Leader:
 function loadExcel(){
 
 const file =
-document.getElementById("excelFile")
-.files[0];
+document.getElementById("excelFile").files[0];
 
 if(!file){
 
@@ -578,6 +577,31 @@ alert("Please upload Master DSR.xlsm");
 return;
 
 }
+
+const reader = new FileReader();
+
+reader.onload = function(e){
+
+const data =
+new Uint8Array(e.target.result);
+
+const workbook =
+XLSX.read(data,{
+type:"array"
+});
+
+alert(
+"Workbook Loaded Successfully\n\n" +
+workbook.SheetNames.join("\n")
+);
+
+};
+
+reader.readAsArrayBuffer(file);
+
+}
+
+</script>
 
 alert(
 "File selected:\n\n" +
