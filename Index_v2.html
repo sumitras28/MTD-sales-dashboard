@@ -1,23 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>MTD Sales Dashboard</title>
 
+<script src="https://cdnjsom/ajax/libs/xlsx/0.18.5/xlsx.full.min.jsscript>
+
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
-
 body{
-font-family:Segoe UI,Arial;
+font-family:Segoe UI;
 background:#f4f7fb;
 padding:20px;
 }
@@ -26,52 +21,38 @@ padding:20px;
 background:#003366;
 color:white;
 padding:20px;
-border-radius:12px;
-margin-bottom:20px;
 text-align:center;
+border-radius:10px;
 }
 
-.upload-box{
+.upload{
 background:white;
 padding:20px;
-border-radius:12px;
-margin-bottom:20px;
-box-shadow:0px 2px 6px rgba(0,0,0,0.15);
+margin-top:20px;
+border-radius:10px;
 }
 
-.kpi-grid{
+.grid{
 display:grid;
 grid-template-columns:repeat(4,1fr);
 gap:15px;
-margin-bottom:20px;
+margin-top:20px;
 }
 
 .card{
 background:white;
 padding:20px;
-border-radius:12px;
-box-shadow:0px 2px 5px rgba(0,0,0,0.15);
-}
-  .card:hover{
-transform:translateY(-4px);
-transition:.3s;
+border-radius:10px;
+box-shadow:0 2px 5px rgba(0,0,0,.15);
 }
 
-.kpi-value{
-font-size:34px;
-}
-
-.section{
-overflow:auto;
-}
-
-.kpi-title{
+.title{
 font-size:14px;
 color:gray;
 }
 
-.kpi-value{
-font-size:30px;
+.value{
+font-size:28px;
 font-weight:bold;
 margin-top:10px;
 }
@@ -80,13 +61,9 @@ margin-top:10px;
 background:white;
 padding:20px;
 margin-top:20px;
-border-radius:12px;
-box-shadow:0px 2px 5px rgba(0,0,0,0.15);
-}
-
-.section h2{
-margin-bottom:15px;
-color:#003366;
+border-radius:10px;
+box-shadow:0 2px 5px rgba(0,0,0,.15);
+overflow:auto;
 }
 
 table{
@@ -117,26 +94,6 @@ color:red;
 color:orange;
 }
 
-.blue{
-color:#003366;
-}
-.target-card{
-border-left:6px solid #003366;
-}
-
-.actual-card{
-border-left:6px solid green;
-}
-
-.achievement-card{
-border-left:6px solid purple;
-}
-
-.status-card{
-border-left:6px solid orange;
-}
-
-  
 </style>
 
 </head>
@@ -144,40 +101,15 @@ border-left:6px solid orange;
 <body>
 
 <div class="header">
-  <div style="
-background:white;
-padding:10px;
-margin-top:10px;
-border-radius:10px;
-display:flex;
-gap:20px;
-justify-content:center;
-font-weight:bold;">
-
-<span>📊 Overview</span>
-<span>🎯 Targets</span>
-<span>👨‍💼 Leads</span>
-<span>🏆 SM Ranking</span>
-<span>📦 Business Mix</span>
-<span>📈 Gap Analysis</span>
-
-</div>
-
 <h1>MTD SALES DASHBOARD</h1>
-
-<p>Target vs NOR Performance Dashboard</p>
-
+<p>Upload Master DSR File</p>
 </div>
 
-<div class="upload-box">
+<div class="upload">
 
-<h3>Upload Master DSR.xlsm</h3>
-
-<input
-type="file"
+<input type="file"
 id="excelFile"
-accept=".xls,.xlsx,.xlsm"
-/>
+accept=".xlsx,.xls,.xlsm">
 
 <button onclick="loadExcel()">
 Generate Dashboard
@@ -185,137 +117,41 @@ Generate Dashboard
 
 </div>
 
-<div class="kpi-grid">
-
-<div class="card target-card">
-<div class="kpi-title">Target NOR</div>
-<div id="target" class="kpi-value blue">8.95 Cr</div>
-</div>
-
-<div class="card actual-card">
-<div class="kpi-title">Actual NOR</div>
-<div id="actual" class="kpi-value green">10.11 Cr</div>
-</div>
-
-<div class="card achievement-card">
-<div class="kpi-title">Achievement %</div>
-<div id="achievement"
-class="kpi-value green">
-112.9%
-</div>
-  </div>
-
-<div class="card status-card">
-<div class="kpi-title">Status</div>
-<div class="kpi-value green">TARGET ACHIEVED ✅</div>
-</div>
-  </div>
+<div class="grid">
 
 <div class="card">
-<div class="kpi-title">Total GTV</div>
-<div id="gtv" class="kpi-value blue"><span class="blue">731.02 Cr</span></div>
+<div class="title">Target NOR</div>
+<div id="target" class="value">0</div>
 </div>
 
 <div class="card">
-<div class="kpi-title">Total Clients</div>
-<div id="clients" class="kpi-value green">0</div>
+<div class="title">Actual NOR</div>
+<div id="actual" class="value green">0</div>
 </div>
 
 <div class="card">
-<div class="kpi-title">Total Leads</div>
-<div id="leads" class="kpi-value orange">7</div>
+<div class="title">Achievement %</div>
+<div id="achievement" class="value">0%</div>
 </div>
 
 <div class="card">
-<div class="kpi-title">Top Lead</div>
-<div id="topLead" class="kpi-value blue">Sachin</div>
+<div class="title">Status</div>
+<div id="status" class="value">-</div>
 </div>
-
-</div>
-
-  <div class="section">
-
-<h2>Executive Summary</h2>
-
-<ul>
-
-<li>
-Target NOR:
-<b>8.95 Cr</b>
-</li>
-
-<li>
-Actual NOR:
-<b>10.11 Cr</b>
-</li>
-
-<li>
-Achievement:
-<b class="green">112.9%</b>
-</li>
-
-<li>
-Best Lead:
-<b>Sachin</b>
-</li>
-
-<li>
-Gap Leader:
-<b class="red">Anil</b>
-</li>
-
-</ul>
 
 </div>
 
 <div class="section">
 
+<h2>SM Performance</h2>
 
-
-<h2>Lead Performance</h2>
-
-<table id="leadTable">
+<table id="smTable">
 
 <tr>
-<th>Lead</th>
+<th>SM</th>
 <th>Target</th>
-<th>Actual NOR</th>
+<th>Actual</th>
 <th>Achievement %</th>
-</tr>
-
-<tr>
-<td>Sachin</td>
-<td>2.16</td>
-<td>2.57</td>
-<td class="green">119%</td>
-</tr>
-
-<tr>
-<td>Ayush</td>
-<td>1.68</td>
-<td>1.92</td>
-<td class="green">114%</td>
-</tr>
-
-<tr>
-<td>Mohit</td>
-<td>0.94</td>
-<td>1.29</td>
-<td class="green">137%</td>
-</tr>
-
-<tr>
-<td>Anil</td>
-<td>1.64</td>
-<td>0.97</td>
-<td class="red">59%</td>
-</tr>
-
-<tr>
-<td>Prateek</td>
-<td>0.88</td>
-<td>0.88</td>
-<td class="orange">100%</td>
 </tr>
 
 </table>
@@ -324,40 +160,29 @@ Gap Leader:
 
 <div class="section">
 
+<h2>Lead Ranking</h2>
 
-
-<h2>Top SM Ranking</h2>
-
-<table id="smTable">
+<table id="leadTable">
 
 <tr>
-<th>SM</th>
-<th>Target (Cr)</th>
+<th>Rank</th>
+<th>Lead</th>
+<th>Actual NOR</th>
 </tr>
 
-<tr>
-<td>Jeyasudha</td>
-<td>1.46</td>
-</tr>
+</table>
+
+</div>
+
+<div class="section">
+
+<h2>NSM Summary</h2>
+
+<table id="nsmTable">
 
 <tr>
-<td>Rohit</td>
-<td>0.96</td>
-</tr>
-
-<tr>
-<td>Shruti Chopra</td>
-<td>0.76</td>
-</tr>
-
-<tr>
-<td>Yashu</td>
-<td>0.58</td>
-</tr>
-
-<tr>
-<td>Mohit</td>
-<td>0.54</td>
+<th>NSM</th>
+<th>Actual NOR</th>
 </tr>
 
 </table>
@@ -372,221 +197,70 @@ Gap Leader:
 
 <tr>
 <th>Client</th>
-<th>Category</th>
-</tr>
-
-<tr>
-<td>Dreamplug Technologies</td>
-<td>Top Client</td>
-</tr>
-
-<tr>
-<td>PhonePe</td>
-<td>Top Client</td>
-</tr>
-
-<tr>
-<td>Zpay Solutions</td>
-<td>Top Client</td>
-</tr>
-
-<tr>
-<td>PL-IPPS-WT-CheQ</td>
-<td>Top Client</td>
-</tr>
-
-<tr>
-<td>MagicPin</td>
-<td>Top Client</td>
+<th>NOR</th>
 </tr>
 
 </table>
 
 </div>
 
-<div class="section">
-
-<h2>Business Mix</h2>
-
-<table>
-
-<tr>
-<th>Business Type</th>
-<th>GTV (Cr)</th>
-</tr>
-
-<tr>
-<td>Merchant</td>
-<td>478.61</td>
-</tr>
-
-<tr>
-<td>Network</td>
-<td>11.91</td>
-</tr>
-
-<tr>
-<td>Online Reseller</td>
-<td>91.60</td>
-</tr>
-
-<tr>
-<td>Open Loop</td>
-<td>148.91</td>
-</tr>
-
-</table>
-
-</div>
-
-<div class="section">
-
-<h2>NSM Summary</h2>
-
-<table>
-
-<tr>
-<th>NSM</th>
-<th>Target</th>
-<th>Actual NOR</th>
-<th>Achievement %</th>
-</tr>
-
-<tr>
-<td>Kalappa</td>
-<td id="kalappaTarget">0</td>
-<td id="kalappaActual">0</td>
-<td id="kalappaAch">0%</td>
-</tr>
-
-<tr>
-<td>Ajay Gupta</td>
-<td id="ajayTarget">0</td>
-<td id="ajayActual">0</td>
-<td id="ajayAch">0%</td>
-</tr>
-
-<tr>
-<td>Mukesh</td>
-<td id="mukeshTarget">0</td>
-<td id="mukeshActual">0</td>
-<td id="mukeshAch">0%</td>
-</tr>
-
-<tr>
-<td>Sam</td>
-<td id="samTarget">0</td>
-<td id="samActual">0</td>
-<td id="samAch">0%</td>
-</tr>
-
-</table>
-
-</div>
-  <div class="section">
-
-<h2>Gap Analysis</h2>
-
-<table id="gapTable">
-
-<tr>
-<th>Lead</th>
-<th>Target</th>
-<th>Actual</th>
-<th>Gap</th>
-</tr>
-
-<tr>
-<td>Sachin</td>
-<td>2.16</td>
-<td>2.57</td>
-<td class="green">+0.41</td>
-</tr>
-
-<tr>
-<td>Ayush</td>
-<td>1.68</td>
-<td>1.92</td>
-<td class="green">+0.24</td>
-</tr>
-
-<tr>
-<td>Anil</td>
-<td>1.64</td>
-<td>0.97</td>
-<td class="red">-0.67</td>
-</tr>
-
-</table>
-
-</div>
-  <div class="section">
-
-<h2>Lead Ranking</h2>
-
-<table>
-
-<tr>
-<th>Rank</th>
-<th>Lead</th>
-<th>Actual NOR</th>
-</tr>
-
-<tr>
-<td>1</td>
-<td>Sachin</td>
-<td>2.57 Cr</td>
-</tr>
-
-<tr>
-<td>2</td>
-<td>Ayush</td>
-<td>1.92 Cr</td>
-</tr>
-
-<tr>
-<td>3</td>
-<td>Mohit</td>
-<td>1.29 Cr</td>
-</tr>
-
-<tr>
-<td>4</td>
-<td>Anil</td>
-<td>0.97 Cr</td>
-</tr>
-
-<tr>
-<td>5</td>
-<td>Prateek</td>
-<td>0.88 Cr</td>
-</tr>
-
-</table>
-
-</div>
 <script>
 
-function loadExcel() {
+function loadExcel(){
 
-    const file =
-    document.getElementById("excelFile").files[0];
+const file =
+document.getElementById("excelFile")
+.files[0];
 
-    if(!file){
+if(!file){
 
-        alert("Please upload Master DSR.xlsm");
+alert("Upload DSR file");
 
-        return;
+return;
+}
 
-    }
+const reader =
+new FileReader();
 
-   const reader = new FileReader();
+reader.onload=function(e){
 
-reader.onload = function(e){
+const workbook =
+XLSX.read(
+e.target.result,
+{
+type:'array'
+}
+);
 
-    alert(
-        "Workbook Read Successfully"
-    );
+const targetSheet =
+workbook.Sheets["Targets"];
+
+const masterSheet =
+workbook.Sheets["Master"];
+
+if(!targetSheet || !masterSheet){
+
+alert(
+"Sheet names must be Targets and Master"
+);
+
+return;
+}
+
+const targets =
+XLSX.utils.sheet_to_json(
+targetSheet
+);
+
+const master =
+XLSX.utils.sheet_to_json(
+masterSheet
+);
+
+generateDashboard(
+targets,
+master
+);
 
 };
 
@@ -594,40 +268,288 @@ reader.readAsArrayBuffer(file);
 
 }
 
-</script>
+function num(v){
 
-<script>
+return Number(
+String(v || 0)
+.replace(/,/g,'')
+);
 
-function loadExcel() {
+}
 
-    const file =
-    document.getElementById("excelFile").files[0];
+function formatCr(v){
 
-    if(!file){
+return (
+v/10000000
+).toFixed(2)+" Cr";
 
-        alert("Please upload Master DSR.xlsm");
+}
 
-        return;
+function generateDashboard(
+targets,
+master
+){
 
-    }
+let totalTarget=0;
 
-    const reader = new FileReader();
+targets.forEach(r=>{
 
-    reader.onload = function(e){
+totalTarget += num(r.Target);
 
-        alert(
-            "Selected File:\n\n" +
-            file.name
-        );
+});
 
-    };
+let totalActual=0;
 
-    reader.readAsArrayBuffer(file);
+master.forEach(r=>{
+
+totalActual += num(r.NOR);
+
+});
+
+const ach =
+(
+(totalActual/totalTarget)
+*100
+).toFixed(1);
+
+document.getElementById(
+"target"
+).innerHTML=
+formatCr(totalTarget);
+
+document.getElementById(
+"actual"
+).innerHTML=
+formatCr(totalActual);
+
+document.getElementById(
+"achievement"
+).innerHTML=
+ach+"%";
+
+document.getElementById(
+"status"
+).innerHTML=
+ach>=100
+?
+"✅ Achieved"
+:
+"❌ Shortfall";
+
+buildSMTable(
+targets,
+master
+);
+
+buildLeadTable(
+master
+);
+
+buildNSMTable(
+master
+);
+
+buildClientTable(
+master
+);
+
+}
+
+function buildSMTable(
+targets,
+master
+){
+
+const actualMap={};
+
+master.forEach(r=>{
+
+const sm=r.SM;
+
+if(!actualMap[sm])
+actualMap[sm]=0;
+
+actualMap[sm]+=num(r.NOR);
+
+});
+
+let html=`
+<tr>
+<th>SM</th>
+<th>Target</th>
+<th>Actual</th>
+<th>Achievement %</th>
+</tr>
+`;
+
+targets.forEach(r=>{
+
+const sm=r.SM;
+
+const target=
+num(r.Target);
+
+const actual=
+actualMap[sm]||0;
+
+const ach=
+target
+?
+((actual/target)*100)
+.toFixed(1)
+:0;
+
+html+=`
+<tr>
+<td>${sm}</td>
+<td>${formatCr(target)}</td>
+<td>${formatCr(actual)}</td>
+<td>${ach}%</td>
+</tr>
+`;
+
+});
+
+document.getElementById(
+"smTable"
+).innerHTML=
+html;
+
+}
+
+function buildLeadTable(
+master
+){
+
+const leadMap={};
+
+master.forEach(r=>{
+
+const lead=r.Lead;
+
+if(!leadMap[lead])
+leadMap[lead]=0;
+
+leadMap[lead]+=num(r.NOR);
+
+});
+
+const sorted=
+Object.entries(leadMap)
+.sort((a,b)=>b[1]-a[1]);
+
+let html=`
+<tr>
+<th>Rank</th>
+<th>Lead</th>
+<th>Actual NOR</th>
+</tr>
+`;
+
+sorted.forEach(
+(item,index)=>{
+
+html+=`
+<tr>
+<td>${index+1}</td>
+<td>${item[0]}</td>
+<td>${formatCr(item[1])}</td>
+</tr>
+`;
+
+});
+
+document.getElementById(
+"leadTable"
+).innerHTML=
+html;
+
+}
+
+function buildNSMTable(
+master
+){
+
+const map={};
+
+master.forEach(r=>{
+
+const nsm=r.NSM;
+
+if(!map[nsm])
+map[nsm]=0;
+
+map[nsm]+=num(r.NOR);
+
+});
+
+let html=`
+<tr>
+<th>NSM</th>
+<th>Actual NOR</th>
+</tr>
+`;
+
+Object.entries(map)
+.sort((a,b)=>b[1]-a[1])
+.forEach(item=>{
+
+html+=`
+<tr>
+<td>${item[0]}</td>
+<td>${formatCr(item[1])}</td>
+</tr>
+`;
+
+});
+
+document.getElementById(
+"nsmTable"
+).innerHTML=
+html;
+
+}
+
+function buildClientTable(
+master
+){
+
+const sorted=
+master.sort(
+(a,b)=>
+num(b.NOR)-num(a.NOR)
+);
+
+let html=`
+<tr>
+<th>Client</th>
+<th>NOR</th>
+</tr>
+`;
+
+sorted
+.slice(0,10)
+.forEach(r=>{
+
+html+=`
+<tr>
+<td>${r["Client Name"]}</td>
+<td>${formatCr(
+num(r.NOR)
+)}</td>
+</tr>
+`;
+
+});
+
+document.getElementById(
+"clientTable"
+).innerHTML=
+html;
 
 }
 
 </script>
 
 </body>
-
 </html>
