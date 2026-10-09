@@ -1,22 +1,527 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>MTD Dashboard Test</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MTD Sales Dashboard</title>
+
+<script src="https://cdnjs.cloudflares/xlsx/0.18.5/xlsx.full.min.jsscript>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Segoe UI, Arial, sans-serif;
+    background:#f4f7fb;
+    padding:20px;
+}
+
+.header{
+    background:#003366;
+    color:white;
+    padding:30px;
+    border-radius:12px;
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.upload-box{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:20px;
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+}
+
+button{
+    background:#0070c0;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    border-radius:6px;
+    cursor:pointer;
+    margin-left:10px;
+}
+
+.kpi-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+}
+
+.kpi-title{
+    color:gray;
+    font-size:14px;
+}
+
+.kpi-value{
+    font-size:28px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.section{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    margin-top:20px;
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+    overflow:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#0070c0;
+    color:white;
+    padding:10px;
+}
+
+td{
+    padding:10px;
+    border:1px solid #ddd;
+}
+
+.green{
+    color:green;
+}
+
+.red{
+    color:red;
+}
+</style>
 </head>
+
 <body>
 
-<h1>MTD Dashboard Working ✅</h1>
+<div class="header">
+    <h1>MTD SALES DASHBOARD</h1>
+    <p>Upload DSR File</p>
+</div>
 
-<input type="file" id="excelFile">
+<div class="upload-box">
+    <input
+        type="file"
+        id="excelFile"
+        accept=".xls,.xlsx,.xlsm"
+    >
+    <button onclick="loadExcel()">
+        Generate Dashboard
+    </button>
+</div>
 
-<button onclick="test()">
-Upload Test
-</button>
+<div class="kpi-grid">
+
+    <div class="card">
+        <div class="kpi-title">Target NOR</div>
+        <div id="target" class="kpi-value">0 Cr</div>
+    </div>
+
+    <div class="card">
+        <div class="kpi-title">Actual NOR</div>
+        <div id="actual" class="kpi-value green">0 Cr</div>
+    </div>
+
+    <div class="card">
+        <div class="kpi-title">Achievement %</div>
+        <div id="achievement" class="kpi-value">0%</div>
+    </div>
+
+    <div class="card">
+        <div class="kpi-title">Status</div>
+        <div id="status" class="kpi-value">-</div>
+    </div>
+
+</div>
+
+<div class="section">
+    <h2>SM Performance</h2>
+    <table id="smTable">
+        <thead>
+            <tr>
+                <th>SM</th>
+                <th>Target Cr</th>
+                <th>Actual Cr</th>
+                <th>Achievement %</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<div class="section">
+    <h2>Lead Ranking</h2>
+    <table id="leadTable">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Lead</th>
+                <th>Actual Cr</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<div class="section">
+    <h2>NSM Summary</h2>
+    <table id="nsmTable">
+        <thead>
+            <tr>
+                <th>NSM</th>
+                <th>Actual Cr</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<div class="section">
+    <h2>Top Clients</h2>
+    <table id="clientTable">
+        <thead>
+            <tr>
+                <th>Client</th>
+                <th>NOR Cr</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
 
 <script>
-function test() {
-    alert("Button Working");
+
+function toNumber(val){
+    return Number(String(val || 0).replace(/,/g,''));
 }
+
+function cr(val){
+    return Number(val).toFixed(2);
+}
+
+function loadExcel(){
+
+    const file =
+    document.getElementById("excelFile").files[0];
+
+    if(!file){
+        alert("Please select Master DSR.xlsm");
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function(e){
+
+        try{
+
+            const workbook =
+            XLSX.read(
+                e.target.result,
+                {type:'array'}
+            );
+
+            const targetSheet =
+            workbook.Sheets["Targets"];
+
+            const masterSheet =
+            workbook.Sheets["Master"];
+
+            if(!targetSheet){
+                alert("Targets sheet not found");
+                return;
+            }
+
+            if(!masterSheet){
+                alert("Master sheet not found");
+                return;
+            }
+
+            const targets =
+            XLSX.utils.sheet_to_json(targetSheet);
+
+            const master =
+            XLSX.utils.sheet_to_json(masterSheet);
+
+            buildDashboard(
+                targets,
+                master
+            );
+
+        }
+        catch(err){
+
+            console.error(err);
+
+            alert(
+                "Error : " + err.message
+            );
+
+        }
+
+    };
+
+    reader.readAsArrayBuffer(file);
+}
+
+function buildDashboard(
+    targets,
+    master
+){
+
+    let totalTarget = 0;
+
+    targets.forEach(r=>{
+
+        totalTarget +=
+        toNumber(r.Target);
+
+    });
+
+    let totalActualCr = 0;
+
+    master.forEach(r=>{
+
+        totalActualCr +=
+        toNumber(r.NOR)/10000000;
+
+    });
+
+    const achievement =
+    totalTarget > 0
+    ?
+    ((totalActualCr/totalTarget)*100)
+    .toFixed(1)
+    :
+    0;
+
+    document.getElementById(
+        "target"
+    ).innerHTML =
+    cr(totalTarget)+" Cr";
+
+    document.getElementById(
+        "actual"
+    ).innerHTML =
+    cr(totalActualCr)+" Cr";
+
+    document.getElementById(
+        "achievement"
+    ).innerHTML =
+    achievement+"%";
+
+    document.getElementById(
+        "status"
+    ).innerHTML =
+    achievement >= 100
+    ? "✅ Target Achieved"
+    : "❌ Shortfall";
+
+    buildSM(
+        targets,
+        master
+    );
+
+    buildLead(
+        master
+    );
+
+    buildNSM(
+        master
+    );
+
+    buildClient(
+        master
+    );
+}
+
+function buildSM(
+targets,
+master
+){
+
+    const actualMap = {};
+
+    master.forEach(r=>{
+
+        const sm = r.SM;
+
+        if(!actualMap[sm]){
+            actualMap[sm] = 0;
+        }
+
+        actualMap[sm] +=
+        toNumber(r.NOR)/10000000;
+
+    });
+
+    let html = "";
+
+    targets.forEach(r=>{
+
+        const sm =
+        r.SM || "";
+
+        const target =
+        toNumber(r.Target);
+
+        if(!target){
+            return;
+        }
+
+        const actual =
+        actualMap[sm] || 0;
+
+        const ach =
+        target > 0
+        ?
+        ((actual/target)*100)
+        .toFixed(1)
+        :
+        0;
+
+        html += `
+        <tr>
+            <td>${sm}</td>
+            <td>${cr(target)}</td>
+            <td>${cr(actual)}</td>
+            <td>${ach}%</td>
+        </tr>
+        `;
+    });
+
+    document.querySelector(
+        "#smTable tbody"
+    ).innerHTML = html;
+}
+
+function buildLead(master){
+
+    const map = {};
+
+    master.forEach(r=>{
+
+        const lead =
+        r.Lead || "NA";
+
+        if(!map[lead]){
+            map[lead] = 0;
+        }
+
+        map[lead] +=
+        toNumber(r.NOR)/10000000;
+
+    });
+
+    const sorted =
+    Object.entries(map)
+    .sort((a,b)=>b[1]-a[1]);
+
+    let html = "";
+
+    sorted.forEach((x,i)=>{
+
+        html += `
+        <tr>
+            <td>${i+1}</td>
+            <td>${x[0]}</td>
+            <td>${cr(x[1])}</td>
+        </tr>
+        `;
+    });
+
+    document.querySelector(
+        "#leadTable tbody"
+    ).innerHTML = html;
+}
+
+function buildNSM(master){
+
+    const map = {};
+
+    master.forEach(r=>{
+
+        const nsm =
+        r.NSM || "NA";
+
+        if(!map[nsm]){
+            map[nsm] = 0;
+        }
+
+        map[nsm] +=
+        toNumber(r.NOR)/10000000;
+
+    });
+
+    const sorted =
+    Object.entries(map)
+    .sort((a,b)=>b[1]-a[1]);
+
+    let html = "";
+
+    sorted.forEach(x=>{
+
+        html += `
+        <tr>
+            <td>${x[0]}</td>
+            <td>${cr(x[1])}</td>
+        </tr>
+        `;
+    });
+
+    document.querySelector(
+        "#nsmTable tbody"
+    ).innerHTML = html;
+}
+
+function buildClient(master){
+
+    const sorted =
+    [...master]
+    .sort(
+        (a,b)=>
+        toNumber(b.NOR)
+        -
+        toNumber(a.NOR)
+    );
+
+    let html = "";
+
+    sorted
+    .slice(0,10)
+    .forEach(r=>{
+
+        html += `
+        <tr>
+            <td>${r["Client Name"] || ""}</td>
+            <td>${cr(
+                toNumber(r.NOR)/10000000
+            )}</td>
+        </tr>
+        `;
+    });
+
+    document.querySelector(
+        "#clientTable tbody"
+    ).innerHTML = html;
+}
+
 </script>
 
 </body>
